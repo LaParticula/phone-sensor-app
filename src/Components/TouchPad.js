@@ -1,13 +1,22 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
+import {useEffect} from 'react/cjs/react.production.min';
 import borderRadius from '../utils/borderRadius';
-const TouchPad = () => {
+const TouchPad = ({onChange}) => {
   const [sizeData, setSizeData] = useState(null);
   const [locationX, setLocationX] = useState(0);
   const [locationY, setLocationY] = useState(0);
+  const [isTouching, setIsTouching] = useState(false);
   const getCoordinates = e => {
-    setLocationX(e.nativeEvent.locationX - sizeData.width / 2);
-    setLocationY((e.nativeEvent.locationY - sizeData.height / 2) * -1);
+    const x = e.nativeEvent.locationX;
+    const y = e.nativeEvent.locationY;
+    setLocationX(x);
+    setLocationY(y);
+    onChange({
+      x: x,
+      y: y,
+      isTouching: isTouching,
+    });
   };
 
   return (
@@ -15,6 +24,20 @@ const TouchPad = () => {
       style={styles.touch_pad}
       onLayout={e => {
         setSizeData(e.nativeEvent.layout);
+      }}
+      onTouchStart={() => {
+        onChange({
+          x: locationX,
+          y: locationY,
+          isTouching: 1,
+        });
+      }}
+      onTouchEnd={() => {
+        onChange({
+          x: locationX,
+          y: locationY,
+          isTouching: 0,
+        });
       }}
       onMoveShouldSetResponder={e => {
         getCoordinates(e);

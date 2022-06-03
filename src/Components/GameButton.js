@@ -6,7 +6,7 @@ const GameButton = ({onPress, title, style}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={style == 'big' ? styles.big_button : styles.button}>
+      style={style === 'big' ? styles.big_button : styles.button}>
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
