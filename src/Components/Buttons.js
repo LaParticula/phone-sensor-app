@@ -1,14 +1,32 @@
 import React from 'react';
 import {View, Button, StyleSheet} from 'react-native';
 import GameButton from './GameButton';
-const Buttons = () => {
+const Buttons = ({onButtonPress}) => {
+  const sendButtonData = (buttonName, type) => {
+    onButtonPress && onButtonPress(buttonName, type);
+  };
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onStartShouldSetResponder={e => true}
+      onMoveShouldSetResponder={e => true}>
       <View style={styles.buttons_container}>
-        <GameButton style="big" title="R" />
+        <GameButton
+          style="big"
+          title="R"
+          onPress={type => {
+            sendButtonData('R', type);
+          }}
+        />
       </View>
       <View style={styles.buttons_container}>
-        <GameButton style="big" title="Gyro" />
+        <GameButton
+          style="big"
+          title="Gyro"
+          onPress={type => {
+            sendButtonData('Gyro', type);
+          }}
+        />
         <GameButton title="+" />
         <GameButton title="-" />
       </View>

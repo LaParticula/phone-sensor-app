@@ -21,6 +21,8 @@ target 'PhoneApp' do
 
   pod 'react-native-udp', :path => '../node_modules/react-native-udp'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'PhoneAppTests' do
     inherit! :complete
     # Pods for testing

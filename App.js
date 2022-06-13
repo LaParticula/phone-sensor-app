@@ -7,10 +7,12 @@ import dgram from 'react-native-udp';
 export default function App() {
   const socketRef = useRef(null);
   const [isListening, setIsListening] = useState();
+  const [sendTouchData, setSendTouchData] = useState(true);
   const [touchData, setTouchData] = useState({
     x: 0,
     y: 0,
     isTouching: 0,
+    button: '1',
   });
 
   const SERVER_ADDRESS = '0.0.0.0'; //Localhost
@@ -35,21 +37,41 @@ export default function App() {
   useEffect(() => {
     if (isListening) {
       socketRef.current.send(
-        `${touchData.x} ${touchData.y} ${touchData.isTouching}`,
+        `${
+          sendTouchData
+            ? `${touchData.x} ${touchData.y} ${touchData.isTouching}`
+            : '0 0 0'
+        } ${touchData.button}`,
         undefined,
         undefined,
         TO_PORT,
         TO_ADDRESS,
       );
     }
-  }, [touchData, socketRef, isListening]);
+  }, [touchData, socketRef, isListening, sendTouchData]);
 
   return (
     <View style={styles.container}>
-      <Buttons />
+    {/*   <Buttons
+        onButtonPress={(buttonName, type) => {
+          setSendTouchData(false);
+          setTouchData({
+            ...touchData,
+            x: 0,
+            y: 0,
+            button: buttonName || 'uwu',
+          });
+          sendTouchData(true);
+        }}
+      /> */}
       <TouchPad
         onChange={cordData => {
-          setTouchData(cordData);
+          sendTouchData && setTouchData(cordData);
+        }}
+      />
+      <TouchPad
+        onChange={cordData => {
+          sendTouchData && setTouchData(cordData);
         }}
       />
     </View>
@@ -64,6 +86,5 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: 20,
   },
 });

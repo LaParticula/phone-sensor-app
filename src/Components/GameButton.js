@@ -5,7 +5,12 @@ import borderRadius from '../utils/borderRadius';
 const GameButton = ({onPress, title, style}) => {
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPressIn={() => {
+        onPress && onPress(true);
+      }}
+      onPressOut={() => {
+        onPress && onPress(false);
+      }}
       style={style === 'big' ? styles.big_button : styles.button}>
       <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
