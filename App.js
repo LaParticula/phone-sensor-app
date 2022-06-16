@@ -3,6 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import Buttons from './src/Components/Buttons';
 import TouchPad from './src/Components/TouchPad';
 import dgram from 'react-native-udp';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function App() {
   const socketRef = useRef(null);
@@ -51,8 +52,8 @@ export default function App() {
   }, [touchData, socketRef, isListening, sendTouchData]);
 
   return (
-    <View style={styles.container}>
-    {/*   <Buttons
+    <GestureHandlerRootView style={styles.container}>
+      <Buttons
         onButtonPress={(buttonName, type) => {
           setSendTouchData(false);
           setTouchData({
@@ -61,12 +62,6 @@ export default function App() {
             y: 0,
             button: buttonName || 'uwu',
           });
-          sendTouchData(true);
-        }}
-      /> */}
-      <TouchPad
-        onChange={cordData => {
-          sendTouchData && setTouchData(cordData);
         }}
       />
       <TouchPad
@@ -74,7 +69,7 @@ export default function App() {
           sendTouchData && setTouchData(cordData);
         }}
       />
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
