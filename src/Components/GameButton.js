@@ -1,16 +1,24 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {TapGestureHandler} from 'react-native-gesture-handler';
 import borderRadius from '../utils/borderRadius';
 
 const GameButton = ({onPress, title, style}) => {
+  const [isPressed, setIsPressed] = useState(false);
   return (
     <TapGestureHandler
-      onActivated={() => {
-        console.log('tap');
-        onPress && onPress(true);
+      maxDurationMs={36000000}
+      onBegan={() => {
+        setIsPressed(true);
+      }}
+      onEnded={() => {
+        setIsPressed(false);
       }}>
-      <View style={style === 'big' ? styles.big_button : styles.button}>
+      <View
+        style={[
+          style === 'big' ? styles.big_button : styles.button,
+          isPressed && styles.pressed,
+        ]}>
         <Text style={styles.text}>{title}</Text>
       </View>
     </TapGestureHandler>
@@ -35,8 +43,6 @@ const styles = StyleSheet.create({
     ...borderRadius([50]),
   },
   button: {
-    shadowColor: '#888',
-    elevation: 2,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -47,5 +53,8 @@ const styles = StyleSheet.create({
     marginRight: 5,
     aspectRatio: 1,
     ...borderRadius([50]),
+  },
+  pressed: {
+    backgroundColor: '#dda62999',
   },
 });

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, StatusBar} from 'react-native';
 import Buttons from './src/Components/Buttons';
 import TouchPad from './src/Components/TouchPad';
 import dgram from 'react-native-udp';
@@ -7,13 +7,12 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 export default function App() {
   const socketRef = useRef(null);
-  const [isListening, setIsListening] = useState();
+  const [isListening, setIsListening] = useState(false);
   const [sendTouchData, setSendTouchData] = useState(true);
   const [touchData, setTouchData] = useState({
     x: 0,
     y: 0,
     isTouching: 0,
-    button: '1',
   });
 
   const SERVER_ADDRESS = '0.0.0.0'; //Localhost
@@ -22,6 +21,7 @@ export default function App() {
   const TO_ADDRESS = '192.168.1.8';
   const TO_PORT = 5019;
   useEffect(() => {
+    StatusBar.setHidden(true, 'none');
     socketRef.current = dgram.createSocket('udp4');
     const {current: socket} = socketRef;
     socket.bind(SERVER_PORT, SERVER_ADDRESS);
@@ -55,16 +55,11 @@ export default function App() {
     <GestureHandlerRootView style={styles.container}>
       <Buttons
         onButtonPress={(buttonName, type) => {
-          setSendTouchData(false);
-          setTouchData({
-            ...touchData,
-            x: 0,
-            y: 0,
-            button: buttonName || 'uwu',
-          });
+          console.log(buttonName);
         }}
       />
       <TouchPad
+        buttonMode={true}
         onChange={cordData => {
           sendTouchData && setTouchData(cordData);
         }}
@@ -81,5 +76,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     alignItems: 'center',
     justifyContent: 'space-between',
+    padding: 20,
   },
 });

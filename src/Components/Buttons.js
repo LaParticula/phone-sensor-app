@@ -18,7 +18,21 @@ const Buttons = ({onButtonPress}) => {
             sendButtonData('R', type);
           }}
         />
+        <GameButton
+          title="Buy"
+          style="big"
+          onPress={type => {
+            sendButtonData('Buy', type);
+          }}
+        />
       </View>
+      <GameButton
+        title="Piun"
+        style="big"
+        onPress={type => {
+          sendButtonData('Piun', type);
+        }}
+      />
       <View style={styles.buttons_container}>
         <GameButton
           style="big"

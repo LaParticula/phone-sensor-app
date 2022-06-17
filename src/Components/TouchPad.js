@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import borderRadius from '../utils/borderRadius';
-import {PanGestureHandler} from 'react-native-gesture-handler';
-const TouchPad = ({onChange}) => {
+import {
+  PanGestureHandler,
+  TapGestureHandler,
+} from 'react-native-gesture-handler';
+const TouchPad = ({onChange, buttonMode}) => {
   const [sizeData, setSizeData] = useState(null);
   const [locationX, setLocationX] = useState(0);
   const [locationY, setLocationY] = useState(0);
@@ -18,6 +21,15 @@ const TouchPad = ({onChange}) => {
       isTouching: 'moving',
     });
   };
+  if (buttonMode) {
+    return (
+      <TapGestureHandler>
+        <View style={[styles.touch_pad, styles.button]}>
+          <Text>Pium</Text>
+        </View>
+      </TapGestureHandler>
+    );
+  }
   return (
     <PanGestureHandler
       onGestureEvent={e => {
@@ -26,7 +38,7 @@ const TouchPad = ({onChange}) => {
         console.log(e.nativeEvent.absoluteY);
       }}
       avgTouches={true}>
-      <View nativeID={'uwu'} key={'uwu'} style={styles.touch_pad} />
+      <View style={styles.touch_pad} />
     </PanGestureHandler>
   );
 };
@@ -45,10 +57,7 @@ const styles = StyleSheet.create({
     shadowColor: '#888',
     elevation: 2,
   },
-  finger: {
-    width: 30,
-    height: 30,
-    backgroundColor: 'red',
-    ...borderRadius([10]),
+  button: {
+    backgroundColor: '#dda629',
   },
 });
