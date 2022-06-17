@@ -2,8 +2,8 @@ import React from 'react';
 import {View, Button, StyleSheet} from 'react-native';
 import GameButton from './GameButton';
 const Buttons = ({onButtonPress}) => {
-  const sendButtonData = (buttonName, type) => {
-    onButtonPress && onButtonPress(buttonName, type);
+  const sendButtonData = (title, state) => {
+    onButtonPress && onButtonPress(title, state);
   };
   return (
     <View
@@ -14,31 +14,31 @@ const Buttons = ({onButtonPress}) => {
         <GameButton
           style="big"
           title="R"
-          onPress={type => {
-            sendButtonData('R', type);
+          onPress={(buttonTitle, state) => {
+            sendButtonData(buttonTitle, state);
           }}
         />
         <GameButton
           title="Buy"
           style="big"
-          onPress={type => {
-            sendButtonData('Buy', type);
+          onPress={(buttonTitle, state) => {
+            sendButtonData(buttonTitle, state);
           }}
         />
       </View>
       <GameButton
         title="Piun"
         style="big"
-        onPress={type => {
-          sendButtonData('Piun', type);
+        onPress={(buttonTitle, state) => {
+          sendButtonData(buttonTitle, state);
         }}
       />
       <View style={styles.buttons_container}>
         <GameButton
           style="big"
           title="Gyro"
-          onPress={type => {
-            sendButtonData('Gyro', type);
+          onPress={(buttonTitle, state) => {
+            sendButtonData(buttonTitle, state);
           }}
         />
         <GameButton title="+" />

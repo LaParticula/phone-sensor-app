@@ -8,7 +8,7 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 export default function App() {
   const socketRef = useRef(null);
   const [isListening, setIsListening] = useState(false);
-  const [sendTouchData, setSendTouchData] = useState(true);
+  const [buttonMode, setButtonMode] = useState(false);
   const [touchData, setTouchData] = useState({
     x: 0,
     y: 0,
@@ -38,30 +38,31 @@ export default function App() {
   useEffect(() => {
     if (isListening) {
       socketRef.current.send(
-        `${
-          sendTouchData
-            ? `${touchData.x} ${touchData.y} ${touchData.isTouching}`
-            : '0 0 0'
-        } ${touchData.button}`,
+        `${`${touchData.x} ${touchData.y} ${touchData.isTouching}`} ${
+          touchData.button
+        }`,
         undefined,
         undefined,
         TO_PORT,
         TO_ADDRESS,
       );
     }
-  }, [touchData, socketRef, isListening, sendTouchData]);
+  }, [touchData, socketRef, isListening]);
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <Buttons
-        onButtonPress={(buttonName, type) => {
-          console.log(buttonName);
+        onButtonPress={(buttonName, state) => {
+          console.log(buttonName, state);
+          buttonName === 'Gyro' && state === true
+            ? setButtonMode(true)
+            : setButtonMode(false);
         }}
       />
       <TouchPad
-        buttonMode={true}
+        buttonMode={buttonMode}
         onChange={cordData => {
-          sendTouchData && setTouchData(cordData);
+          setTouchData(cordData);
         }}
       />
     </GestureHandlerRootView>

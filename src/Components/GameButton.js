@@ -1,10 +1,18 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {TapGestureHandler} from 'react-native-gesture-handler';
 import borderRadius from '../utils/borderRadius';
 
 const GameButton = ({onPress, title, style}) => {
   const [isPressed, setIsPressed] = useState(false);
+
+  const sendPressData = useCallback(() => {
+    onPress && onPress(title, isPressed);
+  }, [onPress, title, isPressed]);
+
+  useEffect(() => {
+    sendPressData();
+  }, [sendPressData]);
   return (
     <TapGestureHandler
       maxDurationMs={36000000}
