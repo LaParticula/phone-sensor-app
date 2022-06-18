@@ -41,8 +41,18 @@ const Buttons = ({onButtonPress}) => {
             sendButtonData(buttonTitle, state);
           }}
         />
-        <GameButton title="+" />
-        <GameButton title="-" />
+        <GameButton
+          title="+"
+          onPress={(buttonTitle, state) => {
+            sendButtonData(buttonTitle, state);
+          }}
+        />
+        <GameButton
+          title="-"
+          onPress={(buttonTitle, state) => {
+            sendButtonData(buttonTitle, state);
+          }}
+        />
       </View>
     </View>
   );

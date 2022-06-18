@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Button} from 'react-native';
 import borderRadius from '../utils/borderRadius';
 import {
   PanGestureHandler,
   TapGestureHandler,
 } from 'react-native-gesture-handler';
-const TouchPad = ({onChange, buttonMode}) => {
+import GameButton from './GameButton';
+const TouchPad = ({onChange, buttonMode, onButtonPress}) => {
   const [sizeData, setSizeData] = useState(null);
   const [locationX, setLocationX] = useState(0);
   const [locationY, setLocationY] = useState(0);
@@ -23,11 +24,15 @@ const TouchPad = ({onChange, buttonMode}) => {
   };
   if (buttonMode) {
     return (
-      <TapGestureHandler>
-        <View style={[styles.touch_pad, styles.button]}>
-          <Text>Pium</Text>
-        </View>
-      </TapGestureHandler>
+      <View style={[styles.touch_pad]}>
+        <GameButton
+          title="Pium"
+          style="big"
+          onPress={(buttonTitle, state) => {
+            onButtonPress && onButtonPress(buttonTitle, state);
+          }}
+        />
+      </View>
     );
   }
   return (

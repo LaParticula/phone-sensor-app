@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, StyleSheet, StatusBar} from 'react-native';
+import {StyleSheet, StatusBar} from 'react-native';
 import Buttons from './src/Components/Buttons';
 import TouchPad from './src/Components/TouchPad';
 import dgram from 'react-native-udp';
@@ -14,7 +14,10 @@ export default function App() {
     y: 0,
     isTouching: 0,
   });
-
+  const [buttonData, setButtonData] = useState({
+    title: 'gyro',
+    state: false,
+  });
   const SERVER_ADDRESS = '0.0.0.0'; //Localhost
   const SERVER_PORT = 5020;
 
@@ -38,9 +41,7 @@ export default function App() {
   useEffect(() => {
     if (isListening) {
       socketRef.current.send(
-        `${`${touchData.x} ${touchData.y} ${touchData.isTouching}`} ${
-          touchData.button
-        }`,
+        `${touchData.x} ${touchData.y} ${touchData.isTouching} `,
         undefined,
         undefined,
         TO_PORT,
@@ -49,18 +50,28 @@ export default function App() {
     }
   }, [touchData, socketRef, isListening]);
 
+  /*   useEffect(() => {
+    console.log(buttonData.title, buttonData.state);
+    if (buttonData.title === 'Gyro') {
+      buttonData.state === true ? setButtonMode(true) : setButtonMode(false);
+    }
+  }, [buttonData]); */
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <Buttons
         onButtonPress={(buttonName, state) => {
+          if (buttonName === 'Gyro') {
+            console.log("------------------")
+            state === true ? setButtonMode(true) : setButtonMode(false);
+          }
           console.log(buttonName, state);
-          buttonName === 'Gyro' && state === true
-            ? setButtonMode(true)
-            : setButtonMode(false);
         }}
       />
       <TouchPad
         buttonMode={buttonMode}
+        onButtonPress={(buttonName, state) => {
+        }}
         onChange={cordData => {
           setTouchData(cordData);
         }}

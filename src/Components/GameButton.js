@@ -3,7 +3,7 @@ import {TouchableOpacity, Text, StyleSheet, View} from 'react-native';
 import {TapGestureHandler} from 'react-native-gesture-handler';
 import borderRadius from '../utils/borderRadius';
 
-const GameButton = ({onPress, title, style}) => {
+const GameButton = ({onPress, title, style, children}) => {
   const [isPressed, setIsPressed] = useState(false);
 
   const sendPressData = useCallback(() => {
@@ -27,7 +27,7 @@ const GameButton = ({onPress, title, style}) => {
           style === 'big' ? styles.big_button : styles.button,
           isPressed && styles.pressed,
         ]}>
-        <Text style={styles.text}>{title}</Text>
+        {children || <Text style={styles.text}>{title}</Text>}
       </View>
     </TapGestureHandler>
   );
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     width: '25%',
     marginRight: 6,
     aspectRatio: 1,
-    ...borderRadius([50]),
+    ...borderRadius([100]),
   },
   button: {
     display: 'flex',
