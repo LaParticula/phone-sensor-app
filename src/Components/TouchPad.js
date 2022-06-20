@@ -8,25 +8,11 @@ import {
 import GameButton from './GameButton';
 const TouchPad = ({onChange, buttonMode, onButtonPress}) => {
   const [sizeData, setSizeData] = useState(null);
-  const [locationX, setLocationX] = useState(0);
-  const [locationY, setLocationY] = useState(0);
-
-  const getCoordinates = e => {
-    const x = e.nativeEvent.locationX;
-    const y = e.nativeEvent.locationY;
-    setLocationX(x);
-    setLocationY(y);
-    onChange({
-      x: x,
-      y: y,
-      isTouching: 'moving',
-    });
-  };
   if (buttonMode) {
     return (
       <View style={[styles.touch_pad]}>
         <GameButton
-          title="Pium"
+          title="Shoot"
           style="big"
           onPress={(buttonTitle, state) => {
             onButtonPress && onButtonPress(buttonTitle, state);
@@ -37,10 +23,21 @@ const TouchPad = ({onChange, buttonMode, onButtonPress}) => {
   }
   return (
     <PanGestureHandler
+      onEnded={() => {
+        onChange({
+          x: 0,
+          y: 0,
+          isTouching: '0',
+        });
+      }}
       onGestureEvent={e => {
-        console.log('------');
-        console.log(e.nativeEvent.absoluteX);
-        console.log(e.nativeEvent.absoluteY);
+        const x = e.nativeEvent.absoluteX;
+        const y = e.nativeEvent.absoluteY;
+        onChange({
+          x: x,
+          y: y,
+          isTouching: 'moving',
+        });
       }}
       avgTouches={true}>
       <View style={styles.touch_pad} />

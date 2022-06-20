@@ -27,7 +27,7 @@ const Buttons = ({onButtonPress}) => {
         />
       </View>
       <GameButton
-        title="Piun"
+        title="Shoot"
         style="big"
         onPress={(buttonTitle, state) => {
           sendButtonData(buttonTitle, state);

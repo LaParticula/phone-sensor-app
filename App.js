@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useCallback} from 'react';
 import {StyleSheet, StatusBar} from 'react-native';
 import Buttons from './src/Components/Buttons';
 import TouchPad from './src/Components/TouchPad';
@@ -13,10 +13,6 @@ export default function App() {
     x: 0,
     y: 0,
     isTouching: 0,
-  });
-  const [buttonData, setButtonData] = useState({
-    title: 'gyro',
-    state: false,
   });
   const SERVER_ADDRESS = '0.0.0.0'; //Localhost
   const SERVER_PORT = 5020;
@@ -38,39 +34,41 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (isListening) {
-      socketRef.current.send(
-        `${touchData.x} ${touchData.y} ${touchData.isTouching} `,
-        undefined,
-        undefined,
-        TO_PORT,
-        TO_ADDRESS,
-      );
-    }
-  }, [touchData, socketRef, isListening]);
+  const sendData = useCallback(
+    buttonData => {
+      if (isListening) {
+        socketRef.current.send(
+          `${touchData.x} ${touchData.y} ${touchData.isTouching} ${buttonData?.title} ${buttonData?.state}`,
+          undefined,
+          undefined,
+          TO_PORT,
+          TO_ADDRESS,
+        );
+      }
+    },
+    [touchData, isListening],
+  );
 
-  /*   useEffect(() => {
-    console.log(buttonData.title, buttonData.state);
-    if (buttonData.title === 'Gyro') {
-      buttonData.state === true ? setButtonMode(true) : setButtonMode(false);
-    }
-  }, [buttonData]); */
+  useEffect(() => {
+    sendData();
+  }, [sendData, touchData, isListening]);
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <Buttons
-        onButtonPress={(buttonName, state) => {
-          if (buttonName === 'Gyro') {
-            console.log("------------------")
+        onButtonPress={(buttonTitle, state) => {
+          if (buttonTitle === 'Gyro') {
+            console.log('------------------');
             state === true ? setButtonMode(true) : setButtonMode(false);
           }
-          console.log(buttonName, state);
+          console.log(buttonTitle, state);
+          sendData({title: buttonTitle, state});
         }}
       />
       <TouchPad
         buttonMode={buttonMode}
-        onButtonPress={(buttonName, state) => {
+        onButtonPress={(buttonTitle, state) => {
+          sendData({title: buttonTitle, state});
         }}
         onChange={cordData => {
           setTouchData(cordData);
