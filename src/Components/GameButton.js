@@ -4,28 +4,19 @@ import {TapGestureHandler} from 'react-native-gesture-handler';
 import borderRadius from '../utils/borderRadius';
 
 const GameButton = ({onPress, title, style, children}) => {
-  const [isPressed, setIsPressed] = useState(false);
-
-  const sendPressData = useCallback(() => {
-    onPress && onPress(title, isPressed);
-  }, [onPress, title, isPressed]);
-
-  useEffect(() => {
-    sendPressData();
-  }, [sendPressData]);
   return (
     <TapGestureHandler
       maxDurationMs={36000000}
       onBegan={() => {
-        setIsPressed(true);
+        onPress(title, true);
       }}
       onEnded={() => {
-        setIsPressed(false);
+        onPress(title, false);
       }}>
       <View
         style={[
           style === 'big' ? styles.big_button : styles.button,
-          isPressed && styles.pressed,
+          false && styles.pressed,
         ]}>
         {children || <Text style={styles.text}>{title}</Text>}
       </View>
